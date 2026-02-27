@@ -53,9 +53,8 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - Data to collect:
   - Pull requests
   - Public repositories (supporting metadata for PR context)
-- Future expansion:
   - Issues / comments
-  - Reviews
+  - Reviews (from public events)
 - Implementation candidates:
   - Prefer GitHub GraphQL API
   - Supplement with REST API as needed

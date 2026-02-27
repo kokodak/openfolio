@@ -142,7 +142,8 @@ h1 {
 }
 
 h2,
-h3 {
+h3,
+h4 {
   margin: 0 0 8px;
 }
 
@@ -164,6 +165,10 @@ h3 {
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface-2);
+}
+
+.list.compact li {
+  padding: 10px;
 }
 
 .list p {
@@ -206,6 +211,12 @@ h3 {
   font-size: 12px;
 }
 
+.triplet {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
 @media (max-width: 720px) {
   .page {
     padding: 24px 14px 48px;
@@ -223,5 +234,9 @@ h3 {
     width: 84px;
     height: 84px;
     border-radius: 14px;
+  }
+
+  .triplet {
+    grid-template-columns: 1fr;
   }
 }

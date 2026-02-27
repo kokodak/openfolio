@@ -1,4 +1,13 @@
-import type { PortfolioData, PullRequestGroup, PullRequestSummary, RepoSummary, UserProfile } from "@/types/portfolio";
+import type {
+  CommentSummary,
+  IssueSummary,
+  PortfolioData,
+  PullRequestGroup,
+  PullRequestSummary,
+  RepoSummary,
+  ReviewSummary,
+  UserProfile
+} from "@/types/portfolio";
 
 const GITHUB_API_BASE = "https://api.github.com";
 
@@ -68,13 +77,35 @@ type GitHubSearchResult = {
   items: GitHubSearchItem[];
 };
 
+type GitHubReviewEvent = {
+  id: string;
+  type: string;
+  created_at: string;
+  repo: {
+    name: string;
+  };
+  payload?: {
+    review?: {
+      state?: string;
+      submitted_at?: string;
+      html_url?: string;
+    };
+    pull_request?: {
+      html_url?: string;
+    };
+  };
+};
+
 type GitHubPullRequestDetail = {
   merged_at: string | null;
 };
 
 const SEARCH_PR_PER_PAGE = 100;
+const SEARCH_MISC_PER_PAGE = 50;
 const DEFAULT_MAX_PR_PAGES = 5;
+const DEFAULT_MAX_MISC_PAGES = 2;
 const DEFAULT_MAX_PR_ENRICH = 80;
+const DEFAULT_MAX_REVIEW_EVENT_PAGES = 2;
 
 function getMaxPrPages(): number {
   const raw = Number(process.env.MAX_PR_PAGES ?? DEFAULT_MAX_PR_PAGES);
@@ -86,6 +117,18 @@ function getMaxPrEnrich(): number {
   const raw = Number(process.env.MAX_PR_ENRICH ?? DEFAULT_MAX_PR_ENRICH);
   if (!Number.isFinite(raw)) return DEFAULT_MAX_PR_ENRICH;
   return Math.max(0, Math.min(200, Math.floor(raw)));
+}
+
+function getMaxMiscPages(): number {
+  const raw = Number(process.env.MAX_MISC_PAGES ?? DEFAULT_MAX_MISC_PAGES);
+  if (!Number.isFinite(raw)) return DEFAULT_MAX_MISC_PAGES;
+  return Math.max(1, Math.min(10, Math.floor(raw)));
+}
+
+function getMaxReviewEventPages(): number {
+  const raw = Number(process.env.MAX_REVIEW_EVENT_PAGES ?? DEFAULT_MAX_REVIEW_EVENT_PAGES);
+  if (!Number.isFinite(raw)) return DEFAULT_MAX_REVIEW_EVENT_PAGES;
+  return Math.max(1, Math.min(10, Math.floor(raw)));
 }
 
 async function fetchPullRequests(username: string): Promise<GitHubSearchItem[]> {
@@ -111,6 +154,58 @@ async function fetchPullRequests(username: string): Promise<GitHubSearchItem[]> 
   }
 
   return all;
+}
+
+async function fetchSearchItems(query: string, maxPages: number, perPage: number): Promise<GitHubSearchItem[]> {
+  const all: GitHubSearchItem[] = [];
+  const seen = new Set<string>();
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const result = await fetchGitHub<GitHubSearchResult>(
+      `/search/issues?q=${encodeURIComponent(query)}&sort=updated&order=desc&per_page=${perPage}&page=${page}`
+    );
+
+    for (const item of result.items) {
+      if (seen.has(item.html_url)) continue;
+      seen.add(item.html_url);
+      all.push(item);
+    }
+
+    if (result.items.length < perPage) {
+      break;
+    }
+  }
+
+  return all;
+}
+
+async function fetchReviewActivities(username: string): Promise<ReviewSummary[]> {
+  const maxPages = getMaxReviewEventPages();
+  const reviews: ReviewSummary[] = [];
+  const seen = new Set<string>();
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const events = await fetchGitHub<GitHubReviewEvent[]>(`/users/${encodeURIComponent(username)}/events/public?per_page=100&page=${page}`);
+    for (const event of events) {
+      if (event.type !== "PullRequestReviewEvent") continue;
+
+      const htmlUrl = event.payload?.review?.html_url ?? event.payload?.pull_request?.html_url;
+      if (!htmlUrl || seen.has(htmlUrl)) continue;
+      seen.add(htmlUrl);
+
+      reviews.push({
+        id: event.id,
+        htmlUrl,
+        repositoryFullName: event.repo.name,
+        state: event.payload?.review?.state ?? null,
+        submittedAt: event.payload?.review?.submitted_at ?? event.created_at ?? null
+      });
+    }
+
+    if (events.length < 100) break;
+  }
+
+  return reviews;
 }
 
 async function enrichMergedAt(items: GitHubSearchItem[]): Promise<Map<string, string | null>> {
@@ -141,10 +236,13 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     throw new Error("Username is required.");
   }
 
-  const [user, repos, prItems] = await Promise.all([
+  const [user, repos, prItems, issueItems, commentItems, reviewActivities] = await Promise.all([
     fetchGitHub<GitHubUser>(`/users/${normalized}`),
     fetchGitHub<GitHubRepo[]>(`/users/${normalized}/repos?sort=updated&per_page=6`),
-    fetchPullRequests(normalized)
+    fetchPullRequests(normalized),
+    fetchSearchItems(`author:${normalized} type:issue`, getMaxMiscPages(), SEARCH_MISC_PER_PAGE),
+    fetchSearchItems(`commenter:${normalized}`, getMaxMiscPages(), SEARCH_MISC_PER_PAGE),
+    fetchReviewActivities(normalized)
   ]);
   const mergedMap = await enrichMergedAt(prItems);
 
@@ -201,12 +299,36 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     }))
     .sort((a, b) => b.total - a.total);
 
+  const issues: IssueSummary[] = issueItems
+    .filter((item) => !item.pull_request)
+    .map((item) => ({
+      id: item.number,
+      title: item.title,
+      htmlUrl: item.html_url,
+      state: item.state,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at,
+      repositoryFullName: item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, ""),
+      comments: item.comments
+    }));
+
+  const commentedItems: CommentSummary[] = commentItems.map((item) => ({
+    id: item.number,
+    title: item.title,
+    htmlUrl: item.html_url,
+    repositoryFullName: item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, ""),
+    updatedAt: item.updated_at
+  }));
+
   return {
     profile,
     topRepos,
     pullRequests,
     pullRequestGroups,
     totalPullRequests: pullRequests.length,
+    issues,
+    reviewActivities,
+    commentedItems,
     generatedAt: new Date().toISOString(),
     source: "live"
   };

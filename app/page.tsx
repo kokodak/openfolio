@@ -160,6 +160,61 @@ export default function HomePage(): React.JSX.Element {
               })}
             </div>
           </article>
+
+          <article className="card">
+            <h3>Other Contributions</h3>
+            <div className="triplet">
+              <section>
+                <h4>Issues Authored ({data.issues.length})</h4>
+                <ul className="list compact">
+                  {data.issues.slice(0, 12).map((issue) => (
+                    <li key={`${issue.repositoryFullName}-issue-${issue.id}`}>
+                      <a href={issue.htmlUrl} target="_blank" rel="noreferrer">
+                        {issue.title}
+                      </a>
+                      <p className="meta">
+                        {issue.state.toUpperCase()} · {issue.repositoryFullName}
+                      </p>
+                    </li>
+                  ))}
+                  {data.issues.length === 0 && <li className="meta">No issue activity found.</li>}
+                </ul>
+              </section>
+
+              <section>
+                <h4>Reviews ({data.reviewActivities.length})</h4>
+                <ul className="list compact">
+                  {data.reviewActivities.slice(0, 12).map((review) => (
+                    <li key={review.id}>
+                      <a href={review.htmlUrl} target="_blank" rel="noreferrer">
+                        {review.repositoryFullName}
+                      </a>
+                      <p className="meta">
+                        {(review.state ?? "UNKNOWN").toUpperCase()} ·{" "}
+                        {review.submittedAt ? new Date(review.submittedAt).toLocaleDateString() : "Unknown date"}
+                      </p>
+                    </li>
+                  ))}
+                  {data.reviewActivities.length === 0 && <li className="meta">No review activity found.</li>}
+                </ul>
+              </section>
+
+              <section>
+                <h4>Comments ({data.commentedItems.length})</h4>
+                <ul className="list compact">
+                  {data.commentedItems.slice(0, 12).map((commented) => (
+                    <li key={`${commented.repositoryFullName}-comment-${commented.id}`}>
+                      <a href={commented.htmlUrl} target="_blank" rel="noreferrer">
+                        {commented.title}
+                      </a>
+                      <p className="meta">{commented.repositoryFullName}</p>
+                    </li>
+                  ))}
+                  {data.commentedItems.length === 0 && <li className="meta">No comment activity found.</li>}
+                </ul>
+              </section>
+            </div>
+          </article>
         </section>
       )}
     </main>

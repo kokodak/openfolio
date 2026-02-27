@@ -121,6 +121,14 @@ Summarize changes by work session.
   - Added `MAX_PR_ENRICH` runtime control in README
   - Completed backlog item for PR merged-state accuracy
   - Verified with `npm run build`
+### Session L
+
+- Context: Expanded contribution scope beyond pull requests
+- Done:
+  - Added issue/review/comment activity ingestion to portfolio API payload
+  - Added `Other Contributions` UI sections for issues, reviews, and comments
+  - Added pagination controls for misc search and review events
+  - Marked backlog item for issue/review/comment expansion as completed
 
 ## Related Docs
 

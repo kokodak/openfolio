@@ -36,12 +36,16 @@ Create `.env.local`:
 GITHUB_TOKEN=your_github_token
 MAX_PR_PAGES=5
 MAX_PR_ENRICH=80
+MAX_MISC_PAGES=2
+MAX_REVIEW_EVENT_PAGES=2
 ```
 
 - `GITHUB_TOKEN` is optional but strongly recommended to reduce rate-limit errors.
 - Without token, GitHub API limits are lower.
 - `MAX_PR_PAGES` controls PR search pagination depth (default: `5`, max: `10`).
 - `MAX_PR_ENRICH` controls how many PRs are enriched with merged-state detail fetch (default: `80`, max: `200`).
+- `MAX_MISC_PAGES` controls pagination depth for issue/comment search (default: `2`, max: `10`).
+- `MAX_REVIEW_EVENT_PAGES` controls pagination depth for review events (default: `2`, max: `10`).
 
 ### 4) Run Development Server
 
