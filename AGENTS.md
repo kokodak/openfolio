@@ -13,6 +13,7 @@ This file is the execution harness for agent-driven delivery.
 - Use English for all artifacts: docs, plans, logs, comments, and commit messages.
 - Use frontmatter for every document under `docs/` (except optional scratch notes).
 - Keep links current whenever files move or are renamed.
+- Sanitize sensitive data before storing or responding (API keys, tokens, secrets, passwords, private credentials).
 - Never use local absolute filesystem paths in documents or responses.
 - Use GitHub links for file references whenever repository remote is configured.
 - If remote is not configured yet, use repo-relative paths as a temporary fallback.

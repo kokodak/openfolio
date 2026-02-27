@@ -31,6 +31,7 @@ Store raw and minimally processed conversation context so future ideation and pl
 - Track decision state explicitly (`open`, `accepted`, `rejected`, `deferred`).
 - Link promoted outcomes to ADRs, specs, backlog items, or implementation PRs.
 - Do not replace this inbox with summaries only; keep both raw notes and promoted artifacts.
+- Sanitize secrets and credentials before writing entries (for example, replace with `[REDACTED_API_KEY]`).
 
 ## Entry File Policy
 
@@ -64,14 +65,14 @@ related:
 - Source: idea | inbox | discussion | follow-up
 - Decision State: open | accepted | rejected | deferred
 - Raw Context:
-  - <original note 1>
-  - <original note 2>
+  - <original note 1, sanitized if sensitive>
+  - <original note 2, sanitized if sensitive>
 - Promotion Targets:
   - ADR: <path or TBD>
   - Spec/Doc: <path or TBD>
   - Backlog: <item or TBD>
 - Notes:
-  - <optional interpretation constraints>
+  - <optional interpretation constraints and sanitization notes>
 ```
 
 ## Entry Index

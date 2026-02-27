@@ -91,6 +91,12 @@ Summarize changes by work session.
   - Converted `docs/domains/operations/context-inbox.md` into guide/index-only document
   - Created `docs/domains/operations/context-inbox/` for one-entry-per-file storage
   - Migrated the initial context entry into a dedicated file with frontmatter
+### Session I
+
+- Context: Reinforced sensitive-data handling for context and response artifacts
+- Done:
+  - Added mandatory sanitization rule for secrets/credentials in `AGENTS.md`
+  - Added context-inbox capture rule and template hints for sanitized raw notes
 
 ## Related Docs
 
