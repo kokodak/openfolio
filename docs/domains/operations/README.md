@@ -11,16 +11,17 @@ owners:
 related:
   - docs/domains/operations/decision-log.md
   - docs/domains/operations/session-log.md
+  - docs/domains/operations/context-inbox.md
 ---
 
 # Operations Domain Hub
 
 ## Scope
 
-Decision records, session history, and operating rules.
+Decision records, session history, raw context inbox, and operating rules.
 
 ## Documents
 
 - Decision Log (ADR): `docs/domains/operations/decision-log.md`
 - Session Log: `docs/domains/operations/session-log.md`
-
+- Context Inbox: `docs/domains/operations/context-inbox.md`

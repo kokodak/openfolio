@@ -15,6 +15,7 @@ related:
   - AGENTS.md
   - ARCHITECTURE.md
   - docs/domains/operations/session-log.md
+  - docs/domains/operations/context-inbox.md
 ---
 
 # Decision Log (ADR)
@@ -157,8 +158,54 @@ The project needs consistent commit quality and predictable history while keepin
 - Pros: cleaner history, easier rollback, clearer release notes
 - Cons: slightly more overhead to split work into coherent units
 
+---
+
+## ADR-0007: Adopt Next.js PR-First Real-Time Portfolio Architecture
+
+- Date: 2026-02-27
+- Status: Accepted
+
+### Context
+
+The project needs to ship a usable MVP quickly while minimizing storage complexity and preserving room for future expansion.
+
+### Decision
+
+- Build MVP with Next.js (App Router).
+- Focus initial portfolio scope on pull requests.
+- Render using real-time fetch from GitHub APIs.
+- Keep persistence minimal (no database in MVP).
+- For previously seen users, run in-process background refresh.
+- Use a clean and modern UI direction.
+
+### Consequences
+
+- Pros: fast MVP delivery, low infrastructure overhead, simpler operations
+- Cons: limited historical durability, process-memory cache reset on redeploy
+
+---
+
+## ADR-0008: Establish Context Inbox for Raw Discussion Retention
+
+- Date: 2026-02-27
+- Status: Accepted
+
+### Context
+
+Idea and inbox discussions can lose fidelity when only summarized into ADRs or session logs.
+
+### Decision
+
+Add `docs/domains/operations/context-inbox.md` as a persistent raw-context store for minimally processed notes from user-agent discussions.
+
+### Consequences
+
+- Pros: lower context loss, better ideation continuity, clearer trace from raw input to decisions
+- Cons: additional maintenance burden and potential duplication with other logs
+
 ## Related Docs
 
 - `AGENTS.md`
 - `ARCHITECTURE.md`
 - `docs/domains/operations/session-log.md`
+- `docs/domains/operations/context-inbox.md`

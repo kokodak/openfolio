@@ -14,6 +14,7 @@ tags:
 related:
   - docs/domains/operations/decision-log.md
   - docs/domains/delivery/backlog.md
+  - docs/domains/operations/context-inbox.md
 ---
 
 # Session Log
@@ -60,12 +61,32 @@ Summarize changes by work session.
 - Done:
   - Added commit message and commit-boundary policy to `AGENTS.md`
   - Added ADR-0006 for commit convention and recommendation behavior
+### Session F
+
+- Context: Started MVP implementation with confirmed product decisions
+- Done:
+  - Updated architecture/backlog/roadmap docs for Next.js + PR-first + real-time fetch strategy
+  - Added ADR-0007 for MVP technical direction
+  - Created Next.js App Router scaffold and TypeScript config
+  - Implemented `/api/portfolio/[username]` live fetch route with cache fallback
+  - Implemented in-memory seen-user registry and background refresh trigger
+  - Built clean and modern portfolio UI with loading/error states
+  - Marked P0 MVP backlog items as completed
 - Next:
-  - Finalize technical stack
-  - Create project code scaffold
-  - Detail GitHub API schema and sync strategy
+  - Add Issue/Review/Comment ingestion for P1 expansion
+  - Improve PR merged-state accuracy (GraphQL enrichment)
+  - Add test and lint workflow
+### Session G
+
+- Context: Added a durable raw-context capture path for idea/inbox discussions
+- Done:
+  - Added `docs/domains/operations/context-inbox.md` with capture policy and entry template
+  - Logged initial accepted entry from user request for unrefined context retention
+  - Added ADR-0008 to formalize context inbox adoption
+  - Updated operations hub and `AGENTS.md` change-discipline rule for context capture
 
 ## Related Docs
 
 - `docs/domains/operations/decision-log.md`
 - `docs/domains/delivery/backlog.md`
+- `docs/domains/operations/context-inbox.md`

@@ -62,6 +62,7 @@ Do not skip step 1 for new features. Do not skip step 2 for behavior changes.
 
 - Record irreversible decisions as ADRs.
 - Record execution history in session logs.
+- Capture raw ideas and inbox-style discussion context in the context inbox document before summarizing.
 - Keep backlog statuses aligned with actual implementation state.
 - If code and docs disagree, either fix the code or update docs in the same task.
 
