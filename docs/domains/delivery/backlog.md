@@ -27,18 +27,20 @@ related:
 
 ## P0 (MVP Required)
 
-- [ ] Initialize project (web app + base routes)
-- [ ] GitHub username input and lookup UI
-- [ ] GitHub API integration (basic user/PR/repo ingestion)
-- [ ] Define and store normalized contribution schema
-- [ ] Render baseline portfolio page
-- [ ] Error handling + loading/empty state UI
+- [x] Initialize Next.js project (App Router + base routes)
+- [x] GitHub username input and lookup UI
+- [x] GitHub API integration (live user/PR/repo ingestion)
+- [x] Build runtime contribution view model (no DB for MVP)
+- [x] Render baseline portfolio page (clean + modern)
+- [x] Error handling and loading/empty states
+- [x] In-memory seen-user background refresh
 
 ## P1 (Quality/Expansion)
 
 - [ ] Contribution impact scoring model v1
 - [ ] Project-level highlight generation
-- [ ] Caching and resync policy
+- [ ] Expand scope to issues/reviews/comments
+- [ ] Durable caching and resync policy
 - [ ] Baseline analysis test dataset
 
 ## P2 (Advanced)
@@ -50,6 +52,7 @@ related:
 ## Notes
 
 - 2026-02-27: Initial backlog created
+- 2026-02-27: MVP decisions confirmed (Next.js, PR-first, real-time fetch, clean/modern UI)
 
 ## Related Docs
 

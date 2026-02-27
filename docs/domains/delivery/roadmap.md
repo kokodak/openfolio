@@ -25,8 +25,8 @@ related:
 
 ## Phase 1: MVP
 
-- GitHub data ingestion
-- Baseline portfolio UI
+- PR-first GitHub data ingestion (live fetch)
+- Baseline portfolio UI (clean and modern)
 - Minimum deployable state
 
 ## Phase 2: Insight
@@ -34,6 +34,7 @@ related:
 - Improve contribution analysis quality
 - Automate impact scoring and highlights
 - Tune caching and performance
+- Expand ingestion to issues/reviews/comments
 
 ## Phase 3: Growth
 

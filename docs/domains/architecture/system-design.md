@@ -24,6 +24,17 @@ related:
 
 Given a GitHub username, collect, normalize, and summarize contribution history into a portfolio page.
 
+## Confirmed MVP Decisions (2026-02-27)
+
+- Framework: Next.js (App Router)
+- Data strategy: minimize persistence; fetch live data for rendering
+- Scope v1: PR-focused portfolio first
+- Expansion: issues, reviews, and comments in later iterations
+- Sync strategy:
+  - Real-time fetch for incoming requests
+  - Background refresh only for previously seen usernames (in-memory first)
+- Design tone: clean and modern
+
 ## High-Level Architecture
 
 1. Ingestion
@@ -37,8 +48,9 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 
 - Input: GitHub username
 - Data to collect:
-  - Public repositories
   - Pull requests
+  - Public repositories (supporting metadata for PR context)
+- Future expansion:
   - Issues / comments
   - Reviews
 - Implementation candidates:
@@ -79,17 +91,16 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 
 ## Data Model (Draft)
 
-- `users`
-- `repos`
-- `contributions`
-- `portfolio_snapshots`
+- Runtime-only view model (MVP)
+- In-memory seen-user registry for background refresh (MVP)
+- Optional persistence introduced only when operationally required
 
-## Initial Tech Choices (Hypothesis)
+## Initial Tech Choices (Confirmed for MVP)
 
 - Frontend: Next.js
-- Backend/API: Next.js Route Handlers or Go service
-- DB: Postgres
-- Queue: Start synchronous, introduce async queue later
+- Backend/API: Next.js Route Handlers
+- DB: Not required for MVP
+- Queue: In-process background refresh for seen users
 
 ## Risks
 
@@ -100,7 +111,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 ## Open Questions
 
 - Include AI summarization in MVP, or start with rule-based summaries?
-- Caching strategy for anonymous visitors?
+- Process-level caching strategy and TTL tuning?
 - Portfolio visibility scope (public vs private link)?
 
 ## Delivery Gate
