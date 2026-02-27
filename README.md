@@ -9,15 +9,74 @@ Openfolio is a Next.js web app that turns GitHub activity into a portfolio-style
 - PR-first portfolio rendering
 - In-memory seen-user refresh and cache fallback
 
-## Local Run
+## Getting Started
 
-1. Install dependencies:
-   - `npm install`
-2. Start development server:
-   - `npm run dev`
-3. Open:
-   - `http://localhost:3000`
+### 1) Prerequisites
 
-## Optional Environment Variable
+- Node.js 20+
+- npm 10+
 
-- `GITHUB_TOKEN`: improves GitHub API rate limits for server-side requests
+### 2) Install Dependencies
+
+```bash
+npm install
+```
+
+If your global npm cache has permission issues, use a local cache:
+
+```bash
+npm install --cache .npm-cache
+```
+
+### 3) Configure Environment Variables (Optional but Recommended)
+
+Create `.env.local`:
+
+```bash
+GITHUB_TOKEN=your_github_token
+```
+
+- `GITHUB_TOKEN` is optional but strongly recommended to reduce rate-limit errors.
+- Without token, GitHub API limits are lower.
+
+### 4) Run Development Server
+
+```bash
+npm run dev
+```
+
+Open:
+
+- [http://localhost:3000](http://localhost:3000)
+
+### 5) Build Check
+
+```bash
+npm run build
+```
+
+## Usage
+
+1. Enter a GitHub username on the home page.
+2. Openfolio fetches user profile, repositories, and recent PR activity in real time.
+3. If live fetch fails and the user was previously seen, cached in-memory data is used as fallback.
+
+## Scripts
+
+- `npm run dev`: start development server
+- `npm run build`: production build
+- `npm run start`: run production server
+- `npm run lint`: run lint checks
+
+## API Route
+
+- `GET /api/portfolio/:username`
+  - Returns profile + repositories + PR summaries
+  - Primary source: live GitHub fetch
+  - Fallback source: in-memory cache for seen users
+
+## Known Limitations (Current MVP)
+
+- PR merged state is not fully enriched yet (`mergedAt` is currently conservative).
+- In-memory cache resets on process restart/redeploy.
+- Issues/reviews/comments are planned for next phases.
