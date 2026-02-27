@@ -39,6 +39,8 @@ related:
 
 - [ ] Contribution impact scoring model v1
 - [ ] Project-level highlight generation
+- [x] Improve PR readability with repository-grouped toggle UI
+- [x] Increase PR ingestion volume with multi-page fetch
 - [ ] Expand scope to issues/reviews/comments
 - [ ] Durable caching and resync policy
 - [ ] Baseline analysis test dataset

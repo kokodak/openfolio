@@ -30,10 +30,19 @@ export type PullRequestSummary = {
   comments: number;
 };
 
+export type PullRequestGroup = {
+  repositoryFullName: string;
+  repositoryUrl: string;
+  total: number;
+  pullRequests: PullRequestSummary[];
+};
+
 export type PortfolioData = {
   profile: UserProfile;
   topRepos: RepoSummary[];
   pullRequests: PullRequestSummary[];
+  pullRequestGroups: PullRequestGroup[];
+  totalPullRequests: number;
   generatedAt: string;
   source: "live" | "cache-fallback";
 };

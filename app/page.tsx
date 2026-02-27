@@ -8,6 +8,7 @@ export default function HomePage(): React.JSX.Element {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<PortfolioData | null>(null);
+  const [expandedRepos, setExpandedRepos] = useState<Record<string, boolean>>({});
 
   const title = useMemo(() => {
     if (!data) return "Openfolio";
@@ -33,6 +34,16 @@ export default function HomePage(): React.JSX.Element {
       }
 
       setData(payload);
+      setExpandedRepos((prev) => {
+        const next: Record<string, boolean> = {};
+        for (const group of payload.pullRequestGroups) {
+          next[group.repositoryFullName] = prev[group.repositoryFullName] ?? false;
+        }
+        if (payload.pullRequestGroups[0]) {
+          next[payload.pullRequestGroups[0].repositoryFullName] = true;
+        }
+        return next;
+      });
     } catch {
       setError("Network error while loading portfolio.");
       setData(null);
@@ -44,6 +55,7 @@ export default function HomePage(): React.JSX.Element {
   return (
     <main className="page">
       <section className="hero">
+        <p className="brand">Openfolio</p>
         <p className="eyebrow">Open Source Portfolio</p>
         <h1>{title}</h1>
         <p className="subtitle">
@@ -104,21 +116,49 @@ export default function HomePage(): React.JSX.Element {
           </article>
 
           <article className="card">
-            <h3>Recent Pull Requests</h3>
-            <ul className="list">
-              {data.pullRequests.map((pr) => (
-                <li key={`${pr.repositoryFullName}-${pr.id}`}>
-                  <a href={pr.htmlUrl} target="_blank" rel="noreferrer">
-                    {pr.title}
-                  </a>
-                  <p>{pr.repositoryFullName}</p>
-                  <p className="meta">
-                    {pr.state.toUpperCase()} · Comments {pr.comments} · Updated{" "}
-                    {new Date(pr.updatedAt).toLocaleDateString()}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <h3>Pull Requests by Project</h3>
+            <p className="meta">
+              Total PRs loaded: {data.totalPullRequests} · Projects: {data.pullRequestGroups.length}
+            </p>
+            <div className="groups">
+              {data.pullRequestGroups.map((group) => {
+                const isOpen = expandedRepos[group.repositoryFullName] ?? false;
+                return (
+                  <section key={group.repositoryFullName} className="group">
+                    <button
+                      className="group-toggle"
+                      type="button"
+                      onClick={() =>
+                        setExpandedRepos((prev) => ({
+                          ...prev,
+                          [group.repositoryFullName]: !isOpen
+                        }))
+                      }
+                    >
+                      <span>{isOpen ? "▾" : "▸"}</span>
+                      <span>{group.repositoryFullName}</span>
+                      <span className="count">{group.total} PRs</span>
+                    </button>
+
+                    {isOpen && (
+                      <ul className="list">
+                        {group.pullRequests.map((pr) => (
+                          <li key={`${pr.repositoryFullName}-${pr.id}`}>
+                            <a href={pr.htmlUrl} target="_blank" rel="noreferrer">
+                              {pr.title}
+                            </a>
+                            <p className="meta">
+                              {pr.state.toUpperCase()} · Comments {pr.comments} · Updated{" "}
+                              {new Date(pr.updatedAt).toLocaleDateString()}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                );
+              })}
+            </div>
           </article>
         </section>
       )}

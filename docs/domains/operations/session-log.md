@@ -72,6 +72,15 @@ Summarize changes by work session.
   - Implemented in-memory seen-user registry and background refresh trigger
   - Built clean and modern portfolio UI with loading/error states
   - Marked P0 MVP backlog items as completed
+### Session G
+
+- Context: Expanded readability and ingestion depth for PR-focused MVP
+- Done:
+  - Added stronger Openfolio branding in the hero section
+  - Switched PR list to repository-grouped collapsible UI
+  - Added multi-page PR ingestion for larger result sets
+  - Added PR pagination environment control (`MAX_PR_PAGES`)
+  - Marked relevant P1 backlog items as completed
 - Next:
   - Add Issue/Review/Comment ingestion for P1 expansion
   - Improve PR merged-state accuracy (GraphQL enrichment)

@@ -34,6 +34,8 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
   - Real-time fetch for incoming requests
   - Background refresh only for previously seen usernames (in-memory first)
 - Design tone: clean and modern
+- PR presentation: grouped by repository with collapsible toggles for readability
+- PR ingestion volume: fetch multiple pages (not just a single page)
 
 ## High-Level Architecture
 
@@ -72,9 +74,9 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 
 - Format:
   - Profile summary
-  - Contribution timeline
   - Project cards
-  - Key PR details
+  - Repository-grouped PR sections (toggle/collapse)
+  - Key PR details within each repository group
 - Sharing:
   - Public URL
   - PDF export (later phase)

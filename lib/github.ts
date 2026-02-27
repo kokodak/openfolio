@@ -1,4 +1,4 @@
-import type { PortfolioData, PullRequestSummary, RepoSummary, UserProfile } from "@/types/portfolio";
+import type { PortfolioData, PullRequestGroup, PullRequestSummary, RepoSummary, UserProfile } from "@/types/portfolio";
 
 const GITHUB_API_BASE = "https://api.github.com";
 
@@ -68,18 +68,50 @@ type GitHubSearchResult = {
   items: GitHubSearchItem[];
 };
 
+const SEARCH_PR_PER_PAGE = 100;
+const DEFAULT_MAX_PR_PAGES = 5;
+
+function getMaxPrPages(): number {
+  const raw = Number(process.env.MAX_PR_PAGES ?? DEFAULT_MAX_PR_PAGES);
+  if (!Number.isFinite(raw)) return DEFAULT_MAX_PR_PAGES;
+  return Math.max(1, Math.min(10, Math.floor(raw)));
+}
+
+async function fetchPullRequests(username: string): Promise<GitHubSearchItem[]> {
+  const all: GitHubSearchItem[] = [];
+  const seen = new Set<string>();
+  const maxPages = getMaxPrPages();
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const result = await fetchGitHub<GitHubSearchResult>(
+      `/search/issues?q=author:${encodeURIComponent(username)}+type:pr&sort=updated&order=desc&per_page=${SEARCH_PR_PER_PAGE}&page=${page}`
+    );
+
+    for (const item of result.items) {
+      if (!item.pull_request) continue;
+      if (seen.has(item.html_url)) continue;
+      seen.add(item.html_url);
+      all.push(item);
+    }
+
+    if (result.items.length < SEARCH_PR_PER_PAGE) {
+      break;
+    }
+  }
+
+  return all;
+}
+
 export async function fetchPortfolio(username: string): Promise<PortfolioData> {
   const normalized = username.trim();
   if (!normalized) {
     throw new Error("Username is required.");
   }
 
-  const [user, repos, prs] = await Promise.all([
+  const [user, repos, prItems] = await Promise.all([
     fetchGitHub<GitHubUser>(`/users/${normalized}`),
     fetchGitHub<GitHubRepo[]>(`/users/${normalized}/repos?sort=updated&per_page=6`),
-    fetchGitHub<GitHubSearchResult>(
-      `/search/issues?q=author:${encodeURIComponent(normalized)}+type:pr&sort=updated&order=desc&per_page=20`
-    )
+    fetchPullRequests(normalized)
   ]);
 
   const profile: UserProfile = {
@@ -102,29 +134,45 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     forksCount: repo.forks_count
   }));
 
-  const pullRequests: PullRequestSummary[] = prs.items
-    .filter((item) => Boolean(item.pull_request))
-    .map((item) => {
-      const repositoryFullName = item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, "");
+  const pullRequests: PullRequestSummary[] = prItems.map((item) => {
+    const repositoryFullName = item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, "");
 
-      return {
-        id: item.number,
-        title: item.title,
-        htmlUrl: item.html_url,
-        repositoryFullName,
-        state: item.state,
-        createdAt: item.created_at,
-        updatedAt: item.updated_at,
-        // Search API does not provide merged_at directly; enrich later via GraphQL/PR endpoint.
-        mergedAt: null,
-        comments: item.comments
-      };
-    });
+    return {
+      id: item.number,
+      title: item.title,
+      htmlUrl: item.html_url,
+      repositoryFullName,
+      state: item.state,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at,
+      // Search API does not provide merged_at directly; enrich later via GraphQL/PR endpoint.
+      mergedAt: null,
+      comments: item.comments
+    };
+  });
+
+  const grouped = new Map<string, PullRequestSummary[]>();
+  for (const pr of pullRequests) {
+    const existing = grouped.get(pr.repositoryFullName) ?? [];
+    existing.push(pr);
+    grouped.set(pr.repositoryFullName, existing);
+  }
+
+  const pullRequestGroups: PullRequestGroup[] = Array.from(grouped.entries())
+    .map(([repositoryFullName, repositoryPullRequests]) => ({
+      repositoryFullName,
+      repositoryUrl: `https://github.com/${repositoryFullName}`,
+      total: repositoryPullRequests.length,
+      pullRequests: repositoryPullRequests
+    }))
+    .sort((a, b) => b.total - a.total);
 
   return {
     profile,
     topRepos,
     pullRequests,
+    pullRequestGroups,
+    totalPullRequests: pullRequests.length,
     generatedAt: new Date().toISOString(),
     source: "live"
   };

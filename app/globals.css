@@ -46,8 +46,16 @@ a:hover {
   box-shadow: 0 8px 30px rgba(31, 57, 91, 0.08);
 }
 
-.eyebrow {
+.brand {
   margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--accent-strong);
+}
+
+.eyebrow {
+  margin: 4px 0 0;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -165,6 +173,37 @@ h3 {
 .meta {
   color: var(--muted);
   font-size: 13px;
+}
+
+.groups {
+  display: grid;
+  gap: 10px;
+}
+
+.group {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.group-toggle {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.group-toggle .count {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 @media (max-width: 720px) {
