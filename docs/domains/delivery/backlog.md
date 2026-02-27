@@ -40,12 +40,12 @@ related:
 - [x] Improve PR merged-state accuracy (enrichment fetch)
 - [x] Contribution impact scoring model v1
 - [x] Project-level highlight generation
-- [ ] Convert top repository section into compact album-style card layout
+- [x] Convert top repository section into compact album-style card layout
 - [x] Improve PR readability with repository-grouped toggle UI
 - [x] Increase PR ingestion volume with multi-page fetch
 - [x] Expand scope to issues/reviews/comments
 - [x] Durable caching and resync policy
-- [ ] Rank project PR groups by repository stars and include project image in toggle list
+- [x] Rank project PR groups by repository stars and include project image in toggle list
 - [ ] Baseline analysis test dataset
 
 ## P2 (Advanced)

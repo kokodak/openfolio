@@ -100,16 +100,18 @@ export default function HomePage(): React.JSX.Element {
 
           <article className="card">
             <h3>Top Repositories</h3>
-            <ul className="list">
+            <ul className="repo-album">
               {data.topRepos.map((repo) => (
-                <li key={repo.htmlUrl}>
+                <li key={repo.htmlUrl} className="repo-card">
                   <a href={repo.htmlUrl} target="_blank" rel="noreferrer">
                     {repo.name}
                   </a>
-                  <p>{repo.description ?? "No description"}</p>
-                  <p className="meta">
-                    {repo.language ?? "N/A"} · Stars {repo.stargazersCount} · Forks {repo.forksCount}
-                  </p>
+                  <p className="repo-description">{repo.description ?? "No description"}</p>
+                  <div className="repo-meta meta">
+                    <span>{repo.language ?? "N/A"}</span>
+                    <span>Stars {repo.stargazersCount}</span>
+                    <span>Forks {repo.forksCount}</span>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -155,8 +157,11 @@ export default function HomePage(): React.JSX.Element {
                       }
                     >
                       <span>{isOpen ? "▾" : "▸"}</span>
-                      <span>{group.repositoryFullName}</span>
-                      <span className="count">{group.total} PRs</span>
+                      <span className="group-main">
+                        <img src={group.repositoryImageUrl} alt={`${group.repositoryFullName} repository image`} />
+                        <span>{group.repositoryFullName}</span>
+                      </span>
+                      <span className="count">★ {group.stargazersCount} · {group.total} PRs</span>
                     </button>
 
                     {isOpen && (

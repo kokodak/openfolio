@@ -152,6 +152,22 @@ Summarize changes by work session.
   - Added missing `## Related Docs` sections to hub, standards, and plan documents
   - Aligned link policy wording with tooling constraints (GitHub-link-first with explicit format exception)
   - Re-validated frontmatter keys and `related` link targets across `docs/`
+### Session N
+
+- Context: Improved project toggle relevance with repository visuals and star-priority ordering
+- Done:
+  - Added repository image and star metadata to PR group payloads
+  - Sorted project toggle groups by repository stars (desc), then PR count
+  - Rendered repository image and star count in grouped toggle rows
+  - Updated architecture/backlog/context inbox docs to reflect accepted behavior
+### Session O
+
+- Context: Improved top repository viewport efficiency on portfolio page
+- Done:
+  - Replaced top repository list rendering with compact album-style cards
+  - Added responsive grid behavior (desktop 3-column, tablet 2-column, mobile 1-column)
+  - Added fixed-height card structure with two-line description clamp and bottom-aligned metadata
+  - Marked backlog item for top repository album layout as completed
 
 ## Related Docs
 
