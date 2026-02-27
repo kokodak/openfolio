@@ -84,6 +84,13 @@ Summarize changes by work session.
   - Logged initial accepted entry from user request for unrefined context retention
   - Added ADR-0008 to formalize context inbox adoption
   - Updated operations hub and `AGENTS.md` change-discipline rule for context capture
+### Session H
+
+- Context: Separated context inbox guide and raw entry data into file-level records
+- Done:
+  - Converted `docs/domains/operations/context-inbox.md` into guide/index-only document
+  - Created `docs/domains/operations/context-inbox/` for one-entry-per-file storage
+  - Migrated the initial context entry into a dedicated file with frontmatter
 
 ## Related Docs
 

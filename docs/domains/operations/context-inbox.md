@@ -17,6 +17,7 @@ related:
   - docs/domains/operations/decision-log.md
   - docs/domains/operations/session-log.md
   - docs/domains/delivery/backlog.md
+  - docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md
 ---
 
 # Context Inbox
@@ -31,10 +32,34 @@ Store raw and minimally processed conversation context so future ideation and pl
 - Link promoted outcomes to ADRs, specs, backlog items, or implementation PRs.
 - Do not replace this inbox with summaries only; keep both raw notes and promoted artifacts.
 
+## Entry File Policy
+
+- Store entries in `docs/domains/operations/context-inbox/`.
+- Use one file per entry.
+- Filename format: `YYYY-MM-DD-short-kebab-title.md`.
+- Include frontmatter in each entry file for retrieval and linking.
+
 ## Entry Template
 
 ```md
-## YYYY-MM-DD - Entry Title
+---
+id: operations-context-inbox-YYYY-MM-DD-short-title
+title: <Entry Title>
+domain: operations
+status: active
+source_of_truth: true
+last_updated: YYYY-MM-DD
+owners:
+  - human
+  - agent
+tags:
+  - context
+  - inbox-entry
+related:
+  - docs/domains/operations/context-inbox.md
+---
+
+# YYYY-MM-DD - Entry Title
 
 - Source: idea | inbox | discussion | follow-up
 - Decision State: open | accepted | rejected | deferred
@@ -49,21 +74,9 @@ Store raw and minimally processed conversation context so future ideation and pl
   - <optional interpretation constraints>
 ```
 
-## Entries
+## Entry Index
 
-## 2026-02-27 - Preserve Raw Discussion Context for Future Ideation
-
-- Source: discussion
-- Decision State: accepted
-- Raw Context:
-  - User asked to keep a document that stores unrefined idea/inbox discussion data so context is not lost.
-  - Purpose is to let the agent reference prior raw context for later idea proposals.
-- Promotion Targets:
-  - ADR: `docs/domains/operations/decision-log.md` (ADR-0008)
-  - Spec/Doc: `AGENTS.md`, `docs/domains/operations/README.md`
-  - Backlog: N/A (operations process update)
-- Notes:
-  - The inbox is additive and does not replace ADR/session/backlog documentation.
+- `docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md`
 
 ## Related Docs
 
@@ -71,3 +84,4 @@ Store raw and minimally processed conversation context so future ideation and pl
 - `docs/domains/operations/decision-log.md`
 - `docs/domains/operations/session-log.md`
 - `docs/domains/delivery/backlog.md`
+- `docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md`

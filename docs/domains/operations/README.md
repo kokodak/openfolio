@@ -25,3 +25,4 @@ Decision records, session history, raw context inbox, and operating rules.
 - Decision Log (ADR): `docs/domains/operations/decision-log.md`
 - Session Log: `docs/domains/operations/session-log.md`
 - Context Inbox: `docs/domains/operations/context-inbox.md`
+- Context Inbox Entries: `docs/domains/operations/context-inbox/`
