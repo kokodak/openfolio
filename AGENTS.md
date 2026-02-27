@@ -14,8 +14,9 @@ This file is the execution harness for agent-driven delivery.
 - Use frontmatter for every document under `docs/` (except optional scratch notes).
 - Keep links current whenever files move or are renamed.
 - Sanitize sensitive data before storing or responding (API keys, tokens, secrets, passwords, private credentials).
-- Never use local absolute filesystem paths in documents or responses.
-- Use GitHub links for file references whenever repository remote is configured.
+- Never use local absolute filesystem paths in project documents.
+- Use GitHub links for file references in assistant/user-facing responses whenever repository remote is configured.
+- If the execution interface enforces local absolute paths for clickable file references, allow that as a tooling exception.
 - If remote is not configured yet, use repo-relative paths as a temporary fallback.
 
 ## Commit Policy

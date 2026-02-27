@@ -129,6 +129,21 @@ Summarize changes by work session.
   - Added `Other Contributions` UI sections for issues, reviews, and comments
   - Added pagination controls for misc search and review events
   - Marked backlog item for issue/review/comment expansion as completed
+### Session M
+
+- Context: Hardened cache and resync policy for predictable API behavior
+- Done:
+  - Implemented in-memory cache state tiers (`fresh`, `stale`, `expired`)
+  - Added deterministic API behavior for each cache tier
+  - Added TTL controls via `CACHE_FRESH_TTL_SEC` and `CACHE_STALE_TTL_SEC`
+  - Marked backlog item for durable caching/resync policy as completed
+### Session M
+
+- Context: Audited harness documentation consistency and resolved standard violations
+- Done:
+  - Added missing `## Related Docs` sections to hub, standards, and plan documents
+  - Aligned link policy wording with tooling constraints (GitHub-link-first with explicit format exception)
+  - Re-validated frontmatter keys and `related` link targets across `docs/`
 
 ## Related Docs
 

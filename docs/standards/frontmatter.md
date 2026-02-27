@@ -50,3 +50,9 @@ related:
   - docs/domains/architecture/system-design.md
 ---
 ```
+
+## Related Docs
+
+- `docs/standards/linking.md`
+- `docs/README.md`
+- `AGENTS.md`

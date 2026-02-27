@@ -23,3 +23,7 @@ Product intent, target users, value proposition, and non-goals.
 
 - Vision: `docs/domains/product/vision.md`
 
+## Related Docs
+
+- `docs/domains/product/vision.md`
+- `docs/domains/delivery/backlog.md`

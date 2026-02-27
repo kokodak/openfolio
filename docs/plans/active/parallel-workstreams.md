@@ -195,3 +195,9 @@ This plan is designed for multi-thread execution across separate Codex sessions.
 - Include in each new Codex thread kickoff:
   - "Use branch `<branch-name>`. Do only the scope in `docs/plans/active/parallel-workstreams.md` for your thread. Update docs before code changes when behavior changes. Keep commit messages in `<type>: <verb> <object>` format."
 
+## Related Docs
+
+- `AGENTS.md`
+- `docs/domains/architecture/system-design.md`
+- `docs/domains/delivery/backlog.md`
+- `docs/domains/operations/session-log.md`

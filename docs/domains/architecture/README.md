@@ -24,3 +24,8 @@ System structure, runtime boundaries, API surface, and technical constraints.
 
 - System Design: `docs/domains/architecture/system-design.md`
 
+## Related Docs
+
+- `ARCHITECTURE.md`
+- `docs/domains/architecture/system-design.md`
+- `docs/domains/data/contribution-schema.md`

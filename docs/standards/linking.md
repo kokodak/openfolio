@@ -30,6 +30,7 @@ related:
 - Do not use local absolute filesystem paths.
 - Use repository-relative paths in docs.
 - Use GitHub URLs in assistant/user-facing responses when remote is configured.
+- If a tooling environment requires local absolute file paths for clickable references, treat that as an explicit response-format exception.
 - If remote is missing, use repository-relative paths and request remote setup.
 
 ## GitHub URL Format
@@ -42,3 +43,9 @@ related:
 - When moving a document, update all inbound links in the same change.
 - If replacing a document, keep a short redirect note in the old file when practical.
 - When remote/branch changes, refresh generated GitHub links.
+
+## Related Docs
+
+- `docs/standards/frontmatter.md`
+- `AGENTS.md`
+- `ARCHITECTURE.md`

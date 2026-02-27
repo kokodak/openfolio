@@ -22,3 +22,7 @@ Schemas, normalization rules, and data quality assumptions.
 
 - Contribution Schema v1: `docs/domains/data/contribution-schema.md`
 
+## Related Docs
+
+- `docs/domains/data/contribution-schema.md`
+- `docs/domains/architecture/system-design.md`

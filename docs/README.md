@@ -46,3 +46,10 @@ When a feature changes behavior:
 2. Confirm scope with the user.
 3. Implement code.
 4. Update logs and backlog.
+
+## Related Docs
+
+- `AGENTS.md`
+- `ARCHITECTURE.md`
+- `docs/standards/frontmatter.md`
+- `docs/standards/linking.md`
