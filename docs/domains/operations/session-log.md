@@ -112,6 +112,15 @@ Summarize changes by work session.
 - Done:
   - Added `docs/plans/active/parallel-workstreams.md` with thread-level scope, branch names, merge order, and conflict map
   - Linked active plan in docs hub for quick discovery
+### Session K
+
+- Context: Started sequential execution mode with prioritized backlog implementation
+- Done:
+  - Added bounded PR merged-state enrichment fetch in API ingestion
+  - Updated UI state label to show `MERGED` when enriched data is available
+  - Added `MAX_PR_ENRICH` runtime control in README
+  - Completed backlog item for PR merged-state accuracy
+  - Verified with `npm run build`
 
 ## Related Docs
 

@@ -35,11 +35,13 @@ Create `.env.local`:
 ```bash
 GITHUB_TOKEN=your_github_token
 MAX_PR_PAGES=5
+MAX_PR_ENRICH=80
 ```
 
 - `GITHUB_TOKEN` is optional but strongly recommended to reduce rate-limit errors.
 - Without token, GitHub API limits are lower.
 - `MAX_PR_PAGES` controls PR search pagination depth (default: `5`, max: `10`).
+- `MAX_PR_ENRICH` controls how many PRs are enriched with merged-state detail fetch (default: `80`, max: `200`).
 
 ### 4) Run Development Server
 

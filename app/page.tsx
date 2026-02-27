@@ -148,7 +148,7 @@ export default function HomePage(): React.JSX.Element {
                               {pr.title}
                             </a>
                             <p className="meta">
-                              {pr.state.toUpperCase()} · Comments {pr.comments} · Updated{" "}
+                              {pr.mergedAt ? "MERGED" : pr.state.toUpperCase()} · Comments {pr.comments} · Updated{" "}
                               {new Date(pr.updatedAt).toLocaleDateString()}
                             </p>
                           </li>

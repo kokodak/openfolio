@@ -68,13 +68,24 @@ type GitHubSearchResult = {
   items: GitHubSearchItem[];
 };
 
+type GitHubPullRequestDetail = {
+  merged_at: string | null;
+};
+
 const SEARCH_PR_PER_PAGE = 100;
 const DEFAULT_MAX_PR_PAGES = 5;
+const DEFAULT_MAX_PR_ENRICH = 80;
 
 function getMaxPrPages(): number {
   const raw = Number(process.env.MAX_PR_PAGES ?? DEFAULT_MAX_PR_PAGES);
   if (!Number.isFinite(raw)) return DEFAULT_MAX_PR_PAGES;
   return Math.max(1, Math.min(10, Math.floor(raw)));
+}
+
+function getMaxPrEnrich(): number {
+  const raw = Number(process.env.MAX_PR_ENRICH ?? DEFAULT_MAX_PR_ENRICH);
+  if (!Number.isFinite(raw)) return DEFAULT_MAX_PR_ENRICH;
+  return Math.max(0, Math.min(200, Math.floor(raw)));
 }
 
 async function fetchPullRequests(username: string): Promise<GitHubSearchItem[]> {
@@ -102,6 +113,28 @@ async function fetchPullRequests(username: string): Promise<GitHubSearchItem[]> 
   return all;
 }
 
+async function enrichMergedAt(items: GitHubSearchItem[]): Promise<Map<string, string | null>> {
+  const mergedMap = new Map<string, string | null>();
+  const maxEnrich = getMaxPrEnrich();
+  const targets = items.slice(0, maxEnrich);
+
+  await Promise.all(
+    targets.map(async (item) => {
+      const repositoryFullName = item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, "");
+      const key = `${repositoryFullName}#${item.number}`;
+
+      try {
+        const detail = await fetchGitHub<GitHubPullRequestDetail>(`/repos/${repositoryFullName}/pulls/${item.number}`);
+        mergedMap.set(key, detail.merged_at);
+      } catch {
+        mergedMap.set(key, null);
+      }
+    })
+  );
+
+  return mergedMap;
+}
+
 export async function fetchPortfolio(username: string): Promise<PortfolioData> {
   const normalized = username.trim();
   if (!normalized) {
@@ -113,6 +146,7 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     fetchGitHub<GitHubRepo[]>(`/users/${normalized}/repos?sort=updated&per_page=6`),
     fetchPullRequests(normalized)
   ]);
+  const mergedMap = await enrichMergedAt(prItems);
 
   const profile: UserProfile = {
     login: user.login,
@@ -136,6 +170,7 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
 
   const pullRequests: PullRequestSummary[] = prItems.map((item) => {
     const repositoryFullName = item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, "");
+    const key = `${repositoryFullName}#${item.number}`;
 
     return {
       id: item.number,
@@ -145,8 +180,7 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
       state: item.state,
       createdAt: item.created_at,
       updatedAt: item.updated_at,
-      // Search API does not provide merged_at directly; enrich later via GraphQL/PR endpoint.
-      mergedAt: null,
+      mergedAt: mergedMap.get(key) ?? null,
       comments: item.comments
     };
   });

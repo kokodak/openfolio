@@ -37,6 +37,7 @@ related:
 
 ## P1 (Quality/Expansion)
 
+- [x] Improve PR merged-state accuracy (enrichment fetch)
 - [ ] Contribution impact scoring model v1
 - [ ] Project-level highlight generation
 - [x] Improve PR readability with repository-grouped toggle UI

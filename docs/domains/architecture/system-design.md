@@ -36,6 +36,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - Design tone: clean and modern
 - PR presentation: grouped by repository with collapsible toggles for readability
 - PR ingestion volume: fetch multiple pages (not just a single page)
+- PR accuracy: enrich merged-state via per-PR detail fetch (bounded by env)
 
 ## High-Level Architecture
 
