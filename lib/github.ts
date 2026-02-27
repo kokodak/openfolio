@@ -266,6 +266,17 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     forksCount: repo.forks_count
   }));
 
+  function computeImpactScore(params: { mergedAt: string | null; comments: number; updatedAt: string }): number {
+    const mergedScore = params.mergedAt ? 55 : 20;
+    const commentScore = Math.min(params.comments, 20);
+    const ageDays = Math.max(
+      0,
+      Math.floor((Date.now() - new Date(params.updatedAt).getTime()) / (1000 * 60 * 60 * 24))
+    );
+    const recencyScore = Math.max(0, 25 - Math.floor(ageDays / 7));
+    return mergedScore + commentScore + recencyScore;
+  }
+
   const pullRequests: PullRequestSummary[] = prItems.map((item) => {
     const repositoryFullName = item.repository_url.replace(`${GITHUB_API_BASE}/repos/`, "");
     const key = `${repositoryFullName}#${item.number}`;
@@ -279,7 +290,12 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
       createdAt: item.created_at,
       updatedAt: item.updated_at,
       mergedAt: mergedMap.get(key) ?? null,
-      comments: item.comments
+      comments: item.comments,
+      impactScore: computeImpactScore({
+        mergedAt: mergedMap.get(key) ?? null,
+        comments: item.comments,
+        updatedAt: item.updated_at
+      })
     };
   });
 
@@ -320,6 +336,20 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     updatedAt: item.updated_at
   }));
 
+  const highlights = pullRequestGroups
+    .map((group) => {
+      const topPullRequest = [...group.pullRequests].sort((a, b) => b.impactScore - a.impactScore)[0];
+      return topPullRequest
+        ? {
+            repositoryFullName: group.repositoryFullName,
+            pullRequest: topPullRequest
+          }
+        : null;
+    })
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    .sort((a, b) => b.pullRequest.impactScore - a.pullRequest.impactScore)
+    .slice(0, 6);
+
   return {
     profile,
     topRepos,
@@ -329,6 +359,7 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     issues,
     reviewActivities,
     commentedItems,
+    highlights,
     generatedAt: new Date().toISOString(),
     source: "live"
   };

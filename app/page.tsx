@@ -116,6 +116,25 @@ export default function HomePage(): React.JSX.Element {
           </article>
 
           <article className="card">
+            <h3>Highlights</h3>
+            <ul className="list">
+              {data.highlights.map((highlight) => (
+                <li key={`${highlight.repositoryFullName}-highlight-${highlight.pullRequest.id}`}>
+                  <a href={highlight.pullRequest.htmlUrl} target="_blank" rel="noreferrer">
+                    {highlight.pullRequest.title}
+                  </a>
+                  <p>{highlight.repositoryFullName}</p>
+                  <p className="meta">
+                    Impact {highlight.pullRequest.impactScore} ·{" "}
+                    {highlight.pullRequest.mergedAt ? "MERGED" : highlight.pullRequest.state.toUpperCase()}
+                  </p>
+                </li>
+              ))}
+              {data.highlights.length === 0 && <li className="meta">No highlight candidates yet.</li>}
+            </ul>
+          </article>
+
+          <article className="card">
             <h3>Pull Requests by Project</h3>
             <p className="meta">
               Total PRs loaded: {data.totalPullRequests} · Projects: {data.pullRequestGroups.length}
@@ -149,7 +168,7 @@ export default function HomePage(): React.JSX.Element {
                             </a>
                             <p className="meta">
                               {pr.mergedAt ? "MERGED" : pr.state.toUpperCase()} · Comments {pr.comments} · Updated{" "}
-                              {new Date(pr.updatedAt).toLocaleDateString()}
+                              {new Date(pr.updatedAt).toLocaleDateString()} · Impact {pr.impactScore}
                             </p>
                           </li>
                         ))}

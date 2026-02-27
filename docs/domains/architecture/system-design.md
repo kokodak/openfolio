@@ -37,6 +37,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - PR presentation: grouped by repository with collapsible toggles for readability
 - PR project list ordering: sort repository groups by stargazer count (desc), then by PR count
 - PR project media: show repository project image (owner avatar) in grouped toggle rows
+- Top repositories layout: use compact album-style card grid to reduce vertical space usage
 - PR ingestion volume: fetch multiple pages (not just a single page)
 - PR accuracy: enrich merged-state via per-PR detail fetch (bounded by env)
 - Cache policy: in-memory TTL tiers (`fresh`, `stale`, `expired`) with deterministic response behavior
@@ -67,7 +68,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - Responsibilities:
   - Normalize events into contribution units
   - Tag language/domain/role (code, review, docs)
-  - Compute impact signals (merged status, engagement, repo size)
+  - Compute impact signals (merged status, engagement, recency) for v1
 - Outputs:
   - Project-level contribution summaries
   - Tech-stack-level contribution summaries
@@ -77,7 +78,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 
 - Format:
   - Profile summary
-  - Project cards
+  - Top repository album cards (compact grid)
   - Repository-grouped PR sections (toggle/collapse)
   - Key PR details within each repository group
 - Sharing:

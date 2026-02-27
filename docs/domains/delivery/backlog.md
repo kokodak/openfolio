@@ -38,8 +38,9 @@ related:
 ## P1 (Quality/Expansion)
 
 - [x] Improve PR merged-state accuracy (enrichment fetch)
-- [ ] Contribution impact scoring model v1
-- [ ] Project-level highlight generation
+- [x] Contribution impact scoring model v1
+- [x] Project-level highlight generation
+- [ ] Convert top repository section into compact album-style card layout
 - [x] Improve PR readability with repository-grouped toggle UI
 - [x] Increase PR ingestion volume with multi-page fetch
 - [x] Expand scope to issues/reviews/comments
@@ -58,6 +59,7 @@ related:
 - 2026-02-27: Initial backlog created
 - 2026-02-27: MVP decisions confirmed (Next.js, PR-first, real-time fetch, clean/modern UI)
 - 2026-02-27: Added UX/data behavior item for star-ranked project groups with project image rendering
+- 2026-02-27: Added UI density improvement item for top repository album-style layout
 
 ## Related Docs
 

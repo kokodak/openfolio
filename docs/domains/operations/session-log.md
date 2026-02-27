@@ -137,6 +137,14 @@ Summarize changes by work session.
   - Added deterministic API behavior for each cache tier
   - Added TTL controls via `CACHE_FRESH_TTL_SEC` and `CACHE_STALE_TTL_SEC`
   - Marked backlog item for durable caching/resync policy as completed
+### Session N
+
+- Context: Added scoring and highlight layer for contribution quality
+- Done:
+  - Added impact scoring v1 to pull request normalization
+  - Added project-level highlight extraction based on top impact PR per repository
+  - Added `Highlights` UI section and per-PR impact visibility
+  - Marked backlog items for scoring and highlights as completed
 ### Session M
 
 - Context: Audited harness documentation consistency and resolved standard violations

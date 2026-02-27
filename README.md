@@ -72,6 +72,7 @@ npm run build
 1. Enter a GitHub username on the home page.
 2. Openfolio fetches user profile, repositories, and recent PR activity in real time.
 3. If live fetch fails and the user was previously seen, cached in-memory data is used as fallback.
+4. PR impact scoring (`v1`) and project highlights are shown based on merged status, engagement, and recency.
 
 ## Scripts
 

@@ -28,6 +28,7 @@ export type PullRequestSummary = {
   updatedAt: string;
   mergedAt: string | null;
   comments: number;
+  impactScore: number;
 };
 
 export type PullRequestGroup = {
@@ -64,6 +65,11 @@ export type ReviewSummary = {
   submittedAt: string | null;
 };
 
+export type ProjectHighlight = {
+  repositoryFullName: string;
+  pullRequest: PullRequestSummary;
+};
+
 export type PortfolioData = {
   profile: UserProfile;
   topRepos: RepoSummary[];
@@ -73,6 +79,7 @@ export type PortfolioData = {
   issues: IssueSummary[];
   reviewActivities: ReviewSummary[];
   commentedItems: CommentSummary[];
+  highlights: ProjectHighlight[];
   generatedAt: string;
   source: "live" | "cache-fresh" | "cache-stale" | "cache-fallback";
 };
