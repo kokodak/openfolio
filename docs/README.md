@@ -34,6 +34,10 @@ This directory is organized by domain to keep retrieval predictable for agents.
 - Frontmatter schema: `docs/standards/frontmatter.md`
 - Cross-linking rules: `docs/standards/linking.md`
 
+## Active Plans
+
+- Parallel workstreams: `docs/plans/active/parallel-workstreams.md`
+
 ## Update Rule
 
 When a feature changes behavior:

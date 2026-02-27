@@ -106,6 +106,12 @@ Summarize changes by work session.
 - Done:
   - Added mandatory sanitization rule for secrets/credentials in `AGENTS.md`
   - Added context-inbox capture rule and template hints for sanitized raw notes
+### Session J
+
+- Context: Prepared multi-thread execution plan for parallel development
+- Done:
+  - Added `docs/plans/active/parallel-workstreams.md` with thread-level scope, branch names, merge order, and conflict map
+  - Linked active plan in docs hub for quick discovery
 
 ## Related Docs
 
