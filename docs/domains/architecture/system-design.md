@@ -36,7 +36,7 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - Design tone: clean and modern
 - PR presentation: grouped by repository with collapsible toggles for readability
 - PR project list ordering: sort repository groups by stargazer count (desc), then by PR count
-- PR project media: show repository project image (owner avatar) in grouped toggle rows
+- PR project media: show repository image in grouped toggle rows (prefer `open_graph_image_url`, fallback to generated Open Graph image URL)
 - Top repositories layout: use compact album-style card grid to reduce vertical space usage
 - PR ingestion volume: fetch multiple pages (not just a single page)
 - PR accuracy: enrich merged-state via per-PR detail fetch (bounded by env)

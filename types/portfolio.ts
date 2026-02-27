@@ -34,6 +34,8 @@ export type PullRequestSummary = {
 export type PullRequestGroup = {
   repositoryFullName: string;
   repositoryUrl: string;
+  repositoryImageUrl: string;
+  stargazersCount: number;
   total: number;
   pullRequests: PullRequestSummary[];
 };

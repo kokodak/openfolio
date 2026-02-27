@@ -100,6 +100,16 @@ type GitHubPullRequestDetail = {
   merged_at: string | null;
 };
 
+type GitHubRepositoryDetail = {
+  stargazers_count: number;
+  open_graph_image_url: string | null;
+};
+
+type RepositoryMeta = {
+  stargazersCount: number;
+  repositoryImageUrl: string;
+};
+
 const SEARCH_PR_PER_PAGE = 100;
 const SEARCH_MISC_PER_PAGE = 50;
 const DEFAULT_MAX_PR_PAGES = 5;
@@ -230,6 +240,34 @@ async function enrichMergedAt(items: GitHubSearchItem[]): Promise<Map<string, st
   return mergedMap;
 }
 
+function buildFallbackRepositoryImageUrl(repositoryFullName: string): string {
+  return `https://opengraph.githubassets.com/1/${repositoryFullName}`;
+}
+
+async function fetchRepositoryMeta(repositoryFullNames: string[]): Promise<Map<string, RepositoryMeta>> {
+  const meta = new Map<string, RepositoryMeta>();
+  const targets = Array.from(new Set(repositoryFullNames));
+
+  await Promise.all(
+    targets.map(async (repositoryFullName) => {
+      try {
+        const detail = await fetchGitHub<GitHubRepositoryDetail>(`/repos/${repositoryFullName}`);
+        meta.set(repositoryFullName, {
+          stargazersCount: detail.stargazers_count,
+          repositoryImageUrl: detail.open_graph_image_url ?? buildFallbackRepositoryImageUrl(repositoryFullName)
+        });
+      } catch {
+        meta.set(repositoryFullName, {
+          stargazersCount: 0,
+          repositoryImageUrl: buildFallbackRepositoryImageUrl(repositoryFullName)
+        });
+      }
+    })
+  );
+
+  return meta;
+}
+
 export async function fetchPortfolio(username: string): Promise<PortfolioData> {
   const normalized = username.trim();
   if (!normalized) {
@@ -238,7 +276,7 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
 
   const [user, repos, prItems, issueItems, commentItems, reviewActivities] = await Promise.all([
     fetchGitHub<GitHubUser>(`/users/${normalized}`),
-    fetchGitHub<GitHubRepo[]>(`/users/${normalized}/repos?sort=updated&per_page=6`),
+    fetchGitHub<GitHubRepo[]>(`/users/${normalized}/repos?sort=stars&per_page=6`),
     fetchPullRequests(normalized),
     fetchSearchItems(`author:${normalized} type:issue`, getMaxMiscPages(), SEARCH_MISC_PER_PAGE),
     fetchSearchItems(`commenter:${normalized}`, getMaxMiscPages(), SEARCH_MISC_PER_PAGE),
@@ -305,15 +343,24 @@ export async function fetchPortfolio(username: string): Promise<PortfolioData> {
     existing.push(pr);
     grouped.set(pr.repositoryFullName, existing);
   }
+  const repositoryMeta = await fetchRepositoryMeta(Array.from(grouped.keys()));
 
   const pullRequestGroups: PullRequestGroup[] = Array.from(grouped.entries())
-    .map(([repositoryFullName, repositoryPullRequests]) => ({
-      repositoryFullName,
-      repositoryUrl: `https://github.com/${repositoryFullName}`,
-      total: repositoryPullRequests.length,
-      pullRequests: repositoryPullRequests
-    }))
-    .sort((a, b) => b.total - a.total);
+    .map(([repositoryFullName, repositoryPullRequests]) => {
+      const meta = repositoryMeta.get(repositoryFullName);
+      return {
+        repositoryFullName,
+        repositoryUrl: `https://github.com/${repositoryFullName}`,
+        repositoryImageUrl: meta?.repositoryImageUrl ?? buildFallbackRepositoryImageUrl(repositoryFullName),
+        stargazersCount: meta?.stargazersCount ?? 0,
+        total: repositoryPullRequests.length,
+        pullRequests: repositoryPullRequests
+      };
+    })
+    .sort(
+      (a, b) =>
+        b.stargazersCount - a.stargazersCount || b.total - a.total || a.repositoryFullName.localeCompare(b.repositoryFullName)
+    );
 
   const issues: IssueSummary[] = issueItems
     .filter((item) => !item.pull_request)

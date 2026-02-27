@@ -18,6 +18,8 @@ related:
   - docs/domains/operations/session-log.md
   - docs/domains/delivery/backlog.md
   - docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md
+  - docs/domains/operations/context-inbox/2026-02-27-project-toggle-image-and-star-sorting.md
+  - docs/domains/operations/context-inbox/2026-02-27-top-repo-album-layout.md
 ---
 
 # Context Inbox
@@ -78,6 +80,8 @@ related:
 ## Entry Index
 
 - `docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md`
+- `docs/domains/operations/context-inbox/2026-02-27-project-toggle-image-and-star-sorting.md`
+- `docs/domains/operations/context-inbox/2026-02-27-top-repo-album-layout.md`
 
 ## Related Docs
 
@@ -86,3 +90,5 @@ related:
 - `docs/domains/operations/session-log.md`
 - `docs/domains/delivery/backlog.md`
 - `docs/domains/operations/context-inbox/2026-02-27-preserve-raw-discussion-context.md`
+- `docs/domains/operations/context-inbox/2026-02-27-project-toggle-image-and-star-sorting.md`
+- `docs/domains/operations/context-inbox/2026-02-27-top-repo-album-layout.md`
