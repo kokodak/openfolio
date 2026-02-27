@@ -74,5 +74,5 @@ export type PortfolioData = {
   reviewActivities: ReviewSummary[];
   commentedItems: CommentSummary[];
   generatedAt: string;
-  source: "live" | "cache-fallback";
+  source: "live" | "cache-fresh" | "cache-stale" | "cache-fallback";
 };

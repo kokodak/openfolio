@@ -38,6 +38,8 @@ MAX_PR_PAGES=5
 MAX_PR_ENRICH=80
 MAX_MISC_PAGES=2
 MAX_REVIEW_EVENT_PAGES=2
+CACHE_FRESH_TTL_SEC=60
+CACHE_STALE_TTL_SEC=600
 ```
 
 - `GITHUB_TOKEN` is optional but strongly recommended to reduce rate-limit errors.
@@ -46,6 +48,8 @@ MAX_REVIEW_EVENT_PAGES=2
 - `MAX_PR_ENRICH` controls how many PRs are enriched with merged-state detail fetch (default: `80`, max: `200`).
 - `MAX_MISC_PAGES` controls pagination depth for issue/comment search (default: `2`, max: `10`).
 - `MAX_REVIEW_EVENT_PAGES` controls pagination depth for review events (default: `2`, max: `10`).
+- `CACHE_FRESH_TTL_SEC` controls how long cached data is treated as fresh (default: `60`).
+- `CACHE_STALE_TTL_SEC` controls stale cache window before expiration (default: `600`).
 
 ### 4) Run Development Server
 
@@ -81,7 +85,10 @@ npm run build
 - `GET /api/portfolio/:username`
   - Returns profile + repositories + PR summaries
   - Primary source: live GitHub fetch
-  - Fallback source: in-memory cache for seen users
+  - Cache policy:
+    - `cache-fresh`: immediate return from fresh in-memory cache
+    - `cache-stale`: return stale cache and trigger background refresh
+    - `cache-fallback`: live fetch failed, returned cached data
 
 ## Known Limitations (Current MVP)
 

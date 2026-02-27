@@ -43,7 +43,8 @@ related:
 - [x] Improve PR readability with repository-grouped toggle UI
 - [x] Increase PR ingestion volume with multi-page fetch
 - [x] Expand scope to issues/reviews/comments
-- [ ] Durable caching and resync policy
+- [x] Durable caching and resync policy
+- [ ] Rank project PR groups by repository stars and include project image in toggle list
 - [ ] Baseline analysis test dataset
 
 ## P2 (Advanced)
@@ -56,6 +57,7 @@ related:
 
 - 2026-02-27: Initial backlog created
 - 2026-02-27: MVP decisions confirmed (Next.js, PR-first, real-time fetch, clean/modern UI)
+- 2026-02-27: Added UX/data behavior item for star-ranked project groups with project image rendering
 
 ## Related Docs
 

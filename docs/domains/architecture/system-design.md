@@ -35,8 +35,11 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
   - Background refresh only for previously seen usernames (in-memory first)
 - Design tone: clean and modern
 - PR presentation: grouped by repository with collapsible toggles for readability
+- PR project list ordering: sort repository groups by stargazer count (desc), then by PR count
+- PR project media: show repository project image (owner avatar) in grouped toggle rows
 - PR ingestion volume: fetch multiple pages (not just a single page)
 - PR accuracy: enrich merged-state via per-PR detail fetch (bounded by env)
+- Cache policy: in-memory TTL tiers (`fresh`, `stale`, `expired`) with deterministic response behavior
 
 ## High-Level Architecture
 
@@ -103,6 +106,10 @@ Given a GitHub username, collect, normalize, and summarize contribution history 
 - Backend/API: Next.js Route Handlers
 - DB: Not required for MVP
 - Queue: In-process background refresh for seen users
+- Cache behavior:
+  - Fresh cache: return cache immediately
+  - Stale cache: return cache and trigger background refresh
+  - Expired cache: attempt live fetch, fallback to cache if live fetch fails
 
 ## Risks
 

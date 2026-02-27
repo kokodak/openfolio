@@ -1,6 +1,5 @@
 import { fetchPortfolio } from "@/lib/github";
-import { getSeenUser, shouldRefresh, triggerBackgroundRefresh, upsertSeenUser } from "@/lib/seen-users";
-import type { PortfolioData } from "@/types/portfolio";
+import { buildCachedPortfolio, getCacheState, getSeenUser, triggerBackgroundRefresh, upsertSeenUser } from "@/lib/seen-users";
 import { NextResponse } from "next/server";
 
 type Params = {
@@ -18,8 +17,17 @@ export async function GET(_: Request, { params }: Params): Promise<NextResponse>
   }
 
   const existing = getSeenUser(normalized);
-  if (existing && shouldRefresh(existing)) {
-    triggerBackgroundRefresh(normalized, fetchPortfolio);
+  if (existing) {
+    const cacheState = getCacheState(existing);
+
+    if (cacheState === "fresh") {
+      return NextResponse.json(buildCachedPortfolio(existing, "cache-fresh"), { status: 200 });
+    }
+
+    if (cacheState === "stale") {
+      triggerBackgroundRefresh(normalized, fetchPortfolio);
+      return NextResponse.json(buildCachedPortfolio(existing, "cache-stale"), { status: 200 });
+    }
   }
 
   try {
@@ -28,12 +36,7 @@ export async function GET(_: Request, { params }: Params): Promise<NextResponse>
     return NextResponse.json(live, { status: 200 });
   } catch (error) {
     if (existing) {
-      const cached: PortfolioData = {
-        ...existing.portfolio,
-        source: "cache-fallback",
-        generatedAt: new Date(existing.lastSyncedAt).toISOString()
-      };
-      return NextResponse.json(cached, { status: 200 });
+      return NextResponse.json(buildCachedPortfolio(existing, "cache-fallback"), { status: 200 });
     }
 
     const message = error instanceof Error ? error.message : "Failed to fetch portfolio.";
